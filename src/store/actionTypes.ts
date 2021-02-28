@@ -1,5 +1,5 @@
 import {ITask} from "../models/ITask";
-import {IAssignee} from "../models/IAssignee";
+import {ITeamMember} from "../models/ITeamMember";
 
 export const ADD_TASK = "ADD_TASK";
 export const UPDATE_TASK = "UPDATE_TASK";

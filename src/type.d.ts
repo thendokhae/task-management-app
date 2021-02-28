@@ -1,11 +1,12 @@
 import {ITask} from "./models/ITask";
-import {IAssignee} from "./models/IAssignee";
+import {ITeamMember} from "./models/ITeamMember";
 import {AddTask, UpdateTask, AddAssignee, FilterTasks} from "./store/actionTypes"
+import {ISelectOption} from "./models/ISelectOption";
 
 type TaskManagerState = {
     taskList: ITask[],
-    assigneeList: IAssignee[],
-    selectedAssignee: IAssignee
+    assigneeList: ITeamMember[],
+    selectedAssignee: ISelectOption
 }
 
 type TaskActionTypes = AddTask | UpdateTask | AddAssignee | FilterTasks;

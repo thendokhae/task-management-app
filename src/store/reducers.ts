@@ -1,9 +1,14 @@
 import {ADD_ASSIGNEE, ADD_TASK, FILTER_TASKS, UPDATE_TASK} from "./actionTypes";
 import {TaskActionTypes, TaskManagerState} from "../type";
-import {IAssignee} from "../models/IAssignee";
+import {ITeamMember} from "../models/ITeamMember";
 import {Priority} from "../models/Priority";
 
-const assigneeList: IAssignee[] = [
+const assigneeList: ITeamMember[] = [
+    {
+      color: '',
+      name: 'All Team members',
+      id: '-1'
+    },
     {
         color: '#87366D',
         name: 'T Man',
@@ -23,28 +28,32 @@ const assigneeList: IAssignee[] = [
 const initialState: TaskManagerState = {
     taskList: [
         {
-            assignee: assigneeList[0],
+            assignee: assigneeList[1],
             name: 'Upgrade framework',
             priority: Priority.LOW,
             complete: false,
             id: 'YY00922'
         },
         {
-            assignee: assigneeList[2],
+            assignee: assigneeList[3],
             name: 'Fix lag issue',
             priority: Priority.HIGH,
             complete: false,
             id: '98322-122'
         },
         {
-            assignee: assigneeList[1],
+            assignee: assigneeList[2],
             name: 'Create user stories',
             priority: Priority.CRITICAL,
             complete: true,
             id: 'YY00JAGE'
         },
     ],
-    assigneeList: assigneeList
+    assigneeList: assigneeList,
+    selectedAssignee: {
+        label: assigneeList[0].name,
+        value: assigneeList[0]
+    }
 }
 
 export function taskManagerReducer(
@@ -58,16 +67,16 @@ export function taskManagerReducer(
             return {...state, taskList: currentTask}
         case UPDATE_TASK:
             return {
-                taskList: state.taskList, assigneeList: state.assigneeList
+                ...state, taskList: state.taskList, assigneeList: state.assigneeList
             }
         case ADD_ASSIGNEE:
             const currentList = state.assigneeList;
             currentList.push(action.payload);
             return { ...state, assigneeList: currentList}
         case FILTER_TASKS:
-            let filteredList = state.taskList;
-            if (action.payload) {
-                filteredList = state.taskList.filter(t => t.assignee.id === action.payload.id)
+            let filteredList = initialState.taskList;
+            if (action.assignee.id !== "-1") {
+                filteredList = initialState.taskList.filter(t => t.assignee.id === action.assignee.id)
             }
             return {...state, taskList: filteredList}
         default:

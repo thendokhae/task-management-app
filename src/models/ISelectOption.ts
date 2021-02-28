@@ -1,6 +1,6 @@
-import {IAssignee} from "./IAssignee";
+import {ITeamMember} from "./ITeamMember";
 
 export interface ISelectOption {
-    value: IAssignee,
+    value: ITeamMember,
     label: string
 }

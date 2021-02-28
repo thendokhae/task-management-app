@@ -1,9 +1,9 @@
-import {IAssignee} from "./IAssignee";
+import {ITeamMember} from "./ITeamMember";
 import {Priority} from "./Priority";
 
 export interface ITask {
     id: string,
-    assignee: IAssignee,
+    assignee: ITeamMember,
     priority: Priority,
     name: string;
     complete: boolean

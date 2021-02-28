@@ -2,30 +2,16 @@ import React, {Dispatch} from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import './App.css';
 import { TaskManagerState} from "./type";
-import {filterTasks} from "./store/actionsCreators";
-import {IAssignee} from "./models/IAssignee";
+import {ITeamMember} from "./models/ITeamMember";
 import {connect} from "react-redux";
 import {ITask} from "./models/ITask";
 import TaskList from "./components/TaskList";
-import AssigneeList from "./components/AssigneeList";
+import TeamMemberList from "./components/TeamMemberList";
 import {ISelectOption} from "./models/ISelectOption";
+import {filterTasks} from "./store/actionsCreators";
 
-const mapStateToProps = (state: TaskManagerState) => {
-  return {
-    taskList: state.taskList,
-    assigneeList: state.assigneeList,
-    selectedAssignee: {
-    }
-  }
-};
 
-const mapDispatchToProps = (dispatch: Dispatch<any>) => {
-  return {
-    onFilterList: (assignee: IAssignee) => dispatch(filterTasks(assignee))
-  }
-};
-
-function getAssigneeOption(assigneeList: IAssignee[]): ISelectOption[]{
+function getAssigneeOption(assigneeList: ITeamMember[]): ISelectOption[]{
   const result: ISelectOption[] = [];
   assigneeList.forEach(a => {
     result.push({ label: a.name, value: a});
@@ -39,17 +25,22 @@ const App: React.FC = () =>  {
       shallowEqual
   );
 
-  const assigneeList: IAssignee[] = useSelector(
+  const assigneeList: ITeamMember[] = useSelector(
       (state: TaskManagerState) => state.assigneeList,
       shallowEqual
   );
 
-  const selectedAssignee: IAssignee = useSelector(
+  const selectedAssignee: ISelectOption = useSelector(
       (state: TaskManagerState) => state.selectedAssignee,
       shallowEqual
   );
 
-  // const dispatch: Dispatch<any> = useDispatch();
+  const dispatch: Dispatch<any> = useDispatch();
+
+  const filterTeamMember = React.useCallback(
+      (selectedOption: any) => dispatch(filterTasks(selectedOption.value)),
+      [dispatch]
+  );
 
   return (
       <main className="App">
@@ -60,7 +51,7 @@ const App: React.FC = () =>  {
           <div className="fl w-40 tc ButtonAlign">
             <div className="cf">
               <div className="fl w-60 tc">
-                <AssigneeList selectOptions={getAssigneeOption(assigneeList)} selectedOption={selectedAssignee}/>
+                <TeamMemberList selectOptions={getAssigneeOption(assigneeList)} selectedOption={selectedAssignee} filterTeamMember={filterTeamMember}/>
               </div>
               <div className="fl w-40 tc">
                 <a className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black">Add</a>

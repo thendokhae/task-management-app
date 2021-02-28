@@ -1,9 +1,9 @@
 import {ITask} from "./ITask";
-import {IAssignee} from "./IAssignee";
+import {ITeamMember} from "./ITeamMember";
 import {Priority} from "./Priority";
 
 export interface ITaskProps {
-    assignee: IAssignee,
+    assignee: ITeamMember,
     priority: Priority,
     name: string;
     complete: boolean
