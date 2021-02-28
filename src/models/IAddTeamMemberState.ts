@@ -1,3 +1,6 @@
+import {ISelectOption} from "./ISelectOption";
+
 export interface IAddTeamMemberState {
-    name: string
+    name: string,
+    color: ISelectOption
 }

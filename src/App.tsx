@@ -43,7 +43,6 @@ function getPriorityOptionsList():ISelectOption[] {
   result.push({label: "Low", value: Priority.LOW})
   result.push({label: "Medium", value: Priority.MEDIUM})
   result.push({label: "High", value: Priority.HIGH})
-  result.push({label: "Critical", value: Priority.CRITICAL})
   return result;
 }
 

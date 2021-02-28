@@ -18,17 +18,17 @@ const assigneeList: ITeamMember[] = [
       id: '-1'
     },
     {
-        color: '#87366D',
+        color: '#500337',
         name: 'T Man',
         id: '122333'
     },
     {
-        color: '#0e50b6',
+        color: '#024750',
         name: 'X Man',
         id: '122tge333'
     },
     {
-        color: '#97b60e',
+        color: '#526502',
         name: 'San Abe',
         id: '1229er0333'
     },
@@ -52,7 +52,7 @@ const initialState: TaskManagerState = {
         {
             assignee: assigneeList[2],
             name: 'Create user stories',
-            priority: Priority.CRITICAL,
+            priority: Priority.MEDIUM,
             complete: true,
             id: 'YY00JAGE'
         },

@@ -1,5 +1,5 @@
 .App {
-  height: 100vh;
+  height: 95vh;
 }
 
 .ButtonAlign {
@@ -16,4 +16,9 @@
 
 .AddTeamMember {
   border: solid 1px;
+}
+
+.TextColor {
+  color: #f1e0e0;
+  font-weight: bold;
 }

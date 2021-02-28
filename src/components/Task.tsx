@@ -53,8 +53,8 @@ class Task extends Component<ITaskProps, ITaskState> {
 
     public render() {
         return (
-            <div className="tc dib br3 pa3 ma2 bw2 shadow-5" style={{backgroundColor: this.props.assignee.color,
-                opacity: this.state.complete ? 0.7 : 1}} onClick={this.selectTask}>
+            <div className="tc dib br3 pa3 ma2 bw2 shadow-5 TextColor" style={{backgroundColor: this.props.assignee.color,
+                opacity: this.state.complete ? 0.7 : 1, border: this.props.priority === "High" ? '3px solid red': ''}} onClick={this.selectTask}>
                 <div>Assignee: {this.props.assignee.name}</div>
                 <div>Priority: {this.props.priority}</div>
                 <div>Task: {this.props.name}</div>
