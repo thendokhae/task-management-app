@@ -33,49 +33,64 @@ const assigneeList: ITeamMember[] = [
         id: '1229er0333'
     },
 ]
-const initialState: TaskManagerState = {
-    taskList: [
-        {
-            assignee: assigneeList[1],
-            name: 'Upgrade framework',
-            priority: Priority.LOW,
-            complete: false,
-            id: 'YY00922'
+
+const getAppDateFromStorage  = (): TaskManagerState => {
+    const data = localStorage.getItem("persist:root");
+    const taskManagerState: TaskManagerState = {
+        taskList: [
+            {
+                assignee: assigneeList[1],
+                name: 'Upgrade framework',
+                priority: Priority.LOW,
+                complete: false,
+                id: 'YY00922'
+            },
+            {
+                assignee: assigneeList[3],
+                name: 'Fix lag issue',
+                priority: Priority.HIGH,
+                complete: false,
+                id: '98322-122'
+            },
+            {
+                assignee: assigneeList[2],
+                name: 'Create user stories',
+                priority: Priority.MEDIUM,
+                complete: true,
+                id: 'YY00JAGE'
+            },
+        ],
+        assigneeList: assigneeList,
+        selectedAssignee: {
+            label: assigneeList[0].name,
+            value: assigneeList[0]
         },
-        {
-            assignee: assigneeList[3],
-            name: 'Fix lag issue',
-            priority: Priority.HIGH,
-            complete: false,
-            id: '98322-122'
-        },
-        {
-            assignee: assigneeList[2],
-            name: 'Create user stories',
-            priority: Priority.MEDIUM,
-            complete: true,
-            id: 'YY00JAGE'
-        },
-    ],
-    assigneeList: assigneeList,
-    selectedAssignee: {
-        label: assigneeList[0].name,
-        value: assigneeList[0]
-    },
-    showAddNewTask: false,
-    showAddNewTeamMember: false,
-    selectedTask: {
-        id: '',
-        priority: Priority.LOW,
-        assignee: {
-            name: '',
+        showAddNewTask: false,
+        showAddNewTeamMember: false,
+        selectedTask: {
             id: '',
-            color: ''
-        },
-        name: '',
-        complete: false
+            priority: Priority.LOW,
+            assignee: {
+                name: '',
+                id: '',
+                color: ''
+            },
+            name: '',
+            complete: false
+        }
     }
+
+    if (data) {
+        const savedState = JSON.parse(data);
+        taskManagerState.taskList = JSON.parse(savedState.taskList);
+        taskManagerState.assigneeList = JSON.parse(savedState.assigneeList);
+        console.log(taskManagerState)
+    }
+
+    return taskManagerState;
 }
+
+const initialState = getAppDateFromStorage();
 
 export function taskManagerReducer(
     state = initialState,
