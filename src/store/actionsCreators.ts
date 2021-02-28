@@ -51,6 +51,14 @@ export function showAddNewTeamMember(addNewTeamMember: boolean): TaskActionTypes
     return request(action)
 }
 
+export function selectTask(task: ITask): TaskActionTypes {
+    const action: TaskActionTypes = {
+        type: actionTypes.SELECT_TASK,
+        task
+    }
+    return request(action)
+}
+
 
 export function request(action: TaskActionTypes) {
     return (dispatch: DispatchType) => {

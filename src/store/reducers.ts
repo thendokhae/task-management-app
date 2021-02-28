@@ -4,11 +4,12 @@ import {
     FILTER_TASKS,
     UPDATE_TASK,
     SHOW_ADD_NEW_TEAM_MEMBER,
-    SHOW_ADD_NEW_TASK
+    SHOW_ADD_NEW_TASK, SELECT_TASK
 } from "./actionTypes";
 import {TaskActionTypes, TaskManagerState} from "../type";
 import {ITeamMember} from "../models/ITeamMember";
 import {Priority} from "../models/Priority";
+import {ITask} from "../models/ITask";
 
 const assigneeList: ITeamMember[] = [
     {
@@ -62,7 +63,18 @@ const initialState: TaskManagerState = {
         value: assigneeList[0]
     },
     showAddNewTask: false,
-    showAddNewTeamMember: false
+    showAddNewTeamMember: false,
+    selectedTask: {
+        id: '',
+        priority: Priority.LOW,
+        assignee: {
+            name: '',
+            id: '',
+            color: ''
+        },
+        name: '',
+        complete: false
+    }
 }
 
 export function taskManagerReducer(
@@ -72,7 +84,12 @@ export function taskManagerReducer(
     switch (action.type) {
         case ADD_TASK:
             const currentTask = state.taskList;
-            currentTask.push(action.task)
+            let existingTask: ITask = currentTask.filter(t => t.id === action.task.id)[0];
+            if (existingTask) {
+                currentTask[currentTask.indexOf(existingTask)] = action.task;
+            } else {
+                currentTask.push(action.task)
+            }
             return {...state, taskList: currentTask}
         case UPDATE_TASK:
             return {
@@ -89,11 +106,11 @@ export function taskManagerReducer(
             }
             return {...state, taskList: filteredList}
         case SHOW_ADD_NEW_TEAM_MEMBER:
-            const show  = !state.showAddNewTeamMember;
-            return {...state, showAddNewTeamMember: show}
+            return {...state, showAddNewTeamMember: action.addNewTeamMember}
         case SHOW_ADD_NEW_TASK:
-            const taskShow = !state.showAddNewTask;
-            return {...state, showAddNewTask: taskShow}
+            return {...state, showAddNewTask: action.addNewTask}
+        case SELECT_TASK:
+            return {...state, selectedTask: action.task}
         default:
             return state
     }

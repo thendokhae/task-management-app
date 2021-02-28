@@ -6,5 +6,7 @@ export interface ITaskProps {
     assignee: ITeamMember,
     priority: Priority,
     name: string;
-    complete: boolean
+    complete: boolean,
+    id: string,
+    selectTask: (task: ITask) => void;
 }

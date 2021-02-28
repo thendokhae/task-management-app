@@ -22,7 +22,26 @@ class AddTask extends Component<IAddTaskProps, IAddTaskState>{
             selectedPriority: {
                 label: 'Low',
                 value: Priority.LOW
-            }
+            },
+            id: ''
+        }
+    }
+
+    componentDidMount() {
+        const name  = this.props.task.name;
+        const selectedAssignee = {label: this.props.task.assignee.name, value: this.props.task.assignee};
+        const selectedPriority = {label: this.props.task.priority, value: this.props.task.priority}
+        const id = this.props.task.id;
+        this.setState({ name, selectedAssignee, selectedPriority, id });
+    }
+
+    componentDidUpdate(prevProps: IAddTaskProps) {
+        if (prevProps.task !== this.props.task) {
+            const name  = this.props.task.name;
+            const selectedAssignee = {label: this.props.task.assignee.name, value: this.props.task.assignee};
+            const selectedPriority = {label: this.props.task.priority, value: this.props.task.priority}
+            const id = this.props.task.id;
+            this.setState({ name, selectedAssignee, selectedPriority, id });
         }
     }
 
@@ -37,7 +56,6 @@ class AddTask extends Component<IAddTaskProps, IAddTaskState>{
     };
 
     handlePriorityChangeData = (event: any) => {
-        event.preventDefault()
         const selectedPriority = event;
         this.setState({ selectedPriority });
     };
@@ -45,7 +63,7 @@ class AddTask extends Component<IAddTaskProps, IAddTaskState>{
     addNewTask = (e: React.FormEvent) => {
         e.preventDefault();
         const task: ITask = {
-            id: Guid.create().toString(),
+            id: this.state.id !== '' ? this.state.id : Guid.create().toString(),
             complete: false,
             priority: this.state.selectedPriority.value,
             name: this.state.name,
@@ -78,7 +96,7 @@ class AddTask extends Component<IAddTaskProps, IAddTaskState>{
                     </div>
                     <div className="measure">
                         <label htmlFor="description" className="f6 b db mb2">Description</label>
-                        <input id="description" className="input-reset ba b--black-20 pa2 mb2 db w-100" type="text"
+                        <input id="description" className="input-reset ba b--black-20 pa2 mb2 db w-100" type="text" value={this.state.name}
                                onChange={this.handleNameChangeData}/>
                     </div>
                     <div className="mt3">

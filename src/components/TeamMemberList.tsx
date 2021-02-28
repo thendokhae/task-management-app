@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {ITeamMemberProps} from "../models/ITeamMemberProps";
 import {ITeamMemberState} from "../models/ITeamMemberState";
 import Select from "react-select";
+import {ITaskListProps} from "../models/ITaskListProps";
 
 class TeamMemberList extends Component<ITeamMemberProps, ITeamMemberState>{
 
@@ -22,6 +23,13 @@ class TeamMemberList extends Component<ITeamMemberProps, ITeamMemberState>{
     componentDidMount() {
         const { selectedOption} = this.props;
         this.setState({ selectedOption });
+    }
+
+    componentDidUpdate(prevProps: ITeamMemberProps) {
+        if (prevProps.selectedOption !== this.props.selectedOption) {
+            const {selectedOption} = this.props;
+            this.setState({selectedOption})
+        }
     }
 
     handleChange = (event: any) => {

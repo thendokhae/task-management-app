@@ -8,7 +8,8 @@ type TaskManagerState = {
     assigneeList: ITeamMember[],
     selectedAssignee: ISelectOption,
     showAddNewTeamMember: boolean,
-    showAddNewTask: boolean
+    showAddNewTask: boolean,
+    selectedTask: ITask
 }
 
 type TaskActionTypes = AddTask | UpdateTask | AddAssignee | FilterTasks;

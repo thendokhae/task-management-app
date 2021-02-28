@@ -1,14 +1,20 @@
 import React, {Dispatch} from "react";
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import './App.css';
-import { TaskManagerState} from "./type";
+import {TaskManagerState} from "./type";
 import {ITeamMember} from "./models/ITeamMember";
-import {connect} from "react-redux";
 import {ITask} from "./models/ITask";
 import TaskList from "./components/TaskList";
 import TeamMemberList from "./components/TeamMemberList";
 import {ISelectOption} from "./models/ISelectOption";
-import {addTask, addTeamMember, filterTasks, showAddNewTask, showAddNewTeamMember} from "./store/actionsCreators";
+import {
+  addTask,
+  addTeamMember,
+  filterTasks,
+  selectTask,
+  showAddNewTask,
+  showAddNewTeamMember
+} from "./store/actionsCreators";
 import AddTeamMember from "./components/AddTeamMember";
 import AddTask from "./components/AddTask";
 import {Priority} from "./models/Priority";
@@ -47,6 +53,11 @@ const App: React.FC = () =>  {
       shallowEqual
   );
 
+  const selectedTask: ITask = useSelector(
+      (state: TaskManagerState) => state.selectedTask,
+      shallowEqual
+  );
+
   const displayAddNewTeamMember: boolean = useSelector(
       (state: TaskManagerState) => state.showAddNewTeamMember,
       shallowEqual
@@ -73,12 +84,22 @@ const App: React.FC = () =>  {
 
   const dispatchFilterTasks = (selectedAssignee: ISelectOption): void => filterTeamMember(selectedAssignee);
 
-  const dispatchShowAddNewTeamMember = (): void => handleShowAddNewTeamMember();
+  const dispatchShowAddNewTeamMember = (show: boolean): void => handleShowAddNewTeamMember(show);
+
+  const dispatchShowAddNewTask = (show: boolean): void => handleShowAddNewTask(show);
+
+  const dispatchSelectTask = (task: ITask): void => handleSelectTask(task);
 
   const handleAddTeam = (teamMember: ITeamMember) => {
     dispatchAddNewTeam(teamMember);
-    dispatchFilterTasks(selectedAssignee);
-    dispatchShowAddNewTeamMember();
+    dispatchShowAddNewTeamMember(false);
+  }
+
+  const dispatchSaveTask = (task: ITask): void => addNewTask(task);
+
+  const handleAddNewTask =(task: ITask) => {
+    dispatchSaveTask(task);
+    dispatchShowAddNewTask(false);
   }
 
   const addNewTask = React.useCallback(
@@ -87,24 +108,40 @@ const App: React.FC = () =>  {
   );
 
   const handleShowAddNewTeamMember = React.useCallback(
-      () => dispatch(showAddNewTeamMember(displayAddNewTeamMember)),
+      (show) => dispatch(showAddNewTeamMember(show)),
       [dispatch]
   );
 
   const handleShowAddNewTask = React.useCallback(
-      () => dispatch(showAddNewTask(displayAddNewTask)),
+      (show) => dispatch(showAddNewTask(show)),
       [dispatch]
   );
 
-  const blankSpaceClicked = (): void => handleShowAddNewTask();
+  const handleSelectTask = React.useCallback(
+      (task) => dispatch(selectTask(task)),
+      [dispatch]
+  );
 
-  const handleAddClick = (
-  ): void => handleShowAddNewTeamMember()
+  const onTaskSelect = (task: ITask) => {
+    dispatchSelectTask(task);
+    blankSpaceClicked(true);
+  }
+
+  const blankSpaceClicked = (show: boolean): void => handleShowAddNewTask(show);
+
+  const onAddTeamMemberClick =()=> {
+    const show = !displayAddNewTeamMember;
+    handleAddClick(show);
+
+  }
+
+  const handleAddClick = (show: boolean): void => handleShowAddNewTeamMember(show)
 
   const onPageClick = (event: any) => {
     console.log('event', event);
     if (event.target.innerText && event.target.innerText.includes("My Task Manager")) {
-        blankSpaceClicked();
+        const showAdd = !displayAddNewTask;
+        blankSpaceClicked(showAdd);
     }
   }
 
@@ -121,21 +158,22 @@ const App: React.FC = () =>  {
                 <TeamMemberList selectOptions={getAssigneeOption(assigneeList)} selectedOption={selectedAssignee} filterTeamMember={filterTeamMember}/>
               </div>
               <div className="fl w-40 tc">
-                <button className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black" onClick={handleAddClick}>Add</button>
+                <button className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black" onClick={onAddTeamMemberClick}>Add</button>
               </div>
             </div>
           </div>
         </article>
         <div className="cf Container">
           <div className="fl w-80 tc">
-            <TaskList taskList={taskList}/>
+            <TaskList taskList={taskList} selectTask={onTaskSelect}/>
           </div>
           <div className="fl w-20 tc">
             {displayAddNewTeamMember ?
                 <AddTeamMember addTeamMember={handleAddTeam}/>: ''}
                 <br/>
             {displayAddNewTask ?
-                <AddTask addTask={addNewTask} assigneeOptions={getAssigneeOption(assigneeList)} priorityOptions={getPriorityOptionsList()}/>
+                <AddTask addTask={handleAddNewTask} assigneeOptions={getAssigneeOption(assigneeList)}
+                         priorityOptions={getPriorityOptionsList()} task={selectedTask}/>
                 : ''}
           </div>
 

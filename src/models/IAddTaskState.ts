@@ -5,5 +5,6 @@ import {ISelectOption} from "./ISelectOption";
 export interface IAddTaskState {
     name: string,
     selectedAssignee: ISelectOption,
-    selectedPriority: ISelectOption
+    selectedPriority: ISelectOption,
+    id: string
 }
