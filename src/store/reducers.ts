@@ -4,7 +4,7 @@ import {
     FILTER_TASKS,
     UPDATE_TASK,
     SHOW_ADD_NEW_TEAM_MEMBER,
-    SHOW_ADD_NEW_TASK, SELECT_TASK
+    SHOW_ADD_NEW_TASK, SELECT_TASK, SEARCH_TASK
 } from "./actionTypes";
 import {TaskActionTypes, TaskManagerState} from "../type";
 import {ITeamMember} from "../models/ITeamMember";
@@ -111,6 +111,16 @@ export function taskManagerReducer(
             return {...state, showAddNewTask: action.addNewTask}
         case SELECT_TASK:
             return {...state, selectedTask: action.task}
+        case SEARCH_TASK:
+            if (action.text.length > 1) {
+                const filteredTasks = initialState.taskList.filter(
+                    t => t.name.toLowerCase().includes(action.text.toLowerCase())
+                        || t.priority.toLowerCase().includes(action.text.toLowerCase()) || t.assignee.name.toLowerCase()
+                            .includes(action.text.toLowerCase()));
+                return {...state, taskList: filteredTasks}
+            } else {
+                return {...state, taskList: initialState.taskList}
+            }
         default:
             return state
     }

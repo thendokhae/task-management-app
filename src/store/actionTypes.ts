@@ -5,3 +5,4 @@ export const FILTER_TASKS = "FILTER_TASKS";
 export const SHOW_ADD_NEW_TEAM_MEMBER = "SHOW_ADD_NEW_TEAM_MEMBER";
 export const SHOW_ADD_NEW_TASK = "SHOW_ADD_NEW_TASK";
 export const SELECT_TASK = "SELECT_TASK";
+export const SEARCH_TASK = "SEARCH_TASK";

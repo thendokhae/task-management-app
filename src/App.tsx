@@ -10,7 +10,7 @@ import {ISelectOption} from "./models/ISelectOption";
 import {
   addTask,
   addTeamMember,
-  filterTasks,
+  filterTasks, searchTask,
   selectTask,
   showAddNewTask,
   showAddNewTeamMember, updateTask
@@ -18,6 +18,7 @@ import {
 import AddTeamMember from "./components/AddTeamMember";
 import AddTask from "./components/AddTask";
 import {Priority} from "./models/Priority";
+import SearchTask from "./components/SearchTask";
 
 
 function getAssigneeOption(assigneeList: ITeamMember[]): ISelectOption[]{
@@ -136,6 +137,12 @@ const App: React.FC = () =>  {
       [dispatch]
   );
 
+  const handleTaskSearch = React.useCallback(
+      (text) => dispatch(searchTask(text)),
+      [dispatch]
+  );
+
+
   const onTaskSelect = (task: ITask) => {
     dispatchSelectTask(task);
     blankSpaceClicked(true);
@@ -182,6 +189,9 @@ const App: React.FC = () =>  {
             </div>
           </div>
         </article>
+        <div className="tc">
+          <SearchTask searchTask={handleTaskSearch}/>
+        </div>
         <div className="cf Container">
           <div className="fl w-80 tc">
             <TaskList taskList={taskList} selectTask={onTaskSelect} completeTask={onCompleteTask}/>

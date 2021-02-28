@@ -59,6 +59,14 @@ export function selectTask(task: ITask): TaskActionTypes {
     return request(action)
 }
 
+export function searchTask(text: string): TaskActionTypes {
+    const action: TaskActionTypes = {
+        type: actionTypes.SEARCH_TASK,
+        text
+    }
+    return request(action)
+}
+
 
 export function request(action: TaskActionTypes) {
     return (dispatch: DispatchType) => {
