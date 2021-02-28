@@ -35,7 +35,7 @@ export function filterTasks(assignee: ITeamMember): TaskActionTypes {
     return request(action)
 }
 
-export function showAddNewTasks(addNewTask: boolean): TaskActionTypes {
+export function showAddNewTask(addNewTask: boolean): TaskActionTypes {
     const action: TaskActionTypes = {
         type: actionTypes.SHOW_ADD_NEW_TASK,
         addNewTask

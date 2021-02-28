@@ -8,8 +8,10 @@ import {ITask} from "./models/ITask";
 import TaskList from "./components/TaskList";
 import TeamMemberList from "./components/TeamMemberList";
 import {ISelectOption} from "./models/ISelectOption";
-import {addTeamMember, filterTasks, showAddNewTeamMember} from "./store/actionsCreators";
+import {addTask, addTeamMember, filterTasks, showAddNewTask, showAddNewTeamMember} from "./store/actionsCreators";
 import AddTeamMember from "./components/AddTeamMember";
+import AddTask from "./components/AddTask";
+import {Priority} from "./models/Priority";
 
 
 function getAssigneeOption(assigneeList: ITeamMember[]): ISelectOption[]{
@@ -17,6 +19,15 @@ function getAssigneeOption(assigneeList: ITeamMember[]): ISelectOption[]{
   assigneeList.forEach(a => {
     result.push({ label: a.name, value: a});
   })
+  return result;
+}
+
+function getPriorityOptionsList():ISelectOption[] {
+  const result: ISelectOption[] = [];
+  result.push({label: "Low", value: Priority.LOW})
+  result.push({label: "Medium", value: Priority.MEDIUM})
+  result.push({label: "High", value: Priority.HIGH})
+  result.push({label: "Critical", value: Priority.CRITICAL})
   return result;
 }
 
@@ -41,6 +52,11 @@ const App: React.FC = () =>  {
       shallowEqual
   );
 
+  const displayAddNewTask: boolean = useSelector(
+      (state: TaskManagerState) => state.showAddNewTask,
+      shallowEqual
+  );
+
   const dispatch: Dispatch<any> = useDispatch();
 
   const filterTeamMember = React.useCallback(
@@ -53,17 +69,48 @@ const App: React.FC = () =>  {
       [dispatch]
   );
 
+  const dispatchAddNewTeam = (team: ITeamMember): void => addNewTeamMember(team);
+
+  const dispatchFilterTasks = (selectedAssignee: ISelectOption): void => filterTeamMember(selectedAssignee);
+
+  const dispatchShowAddNewTeamMember = (): void => handleShowAddNewTeamMember();
+
+  const handleAddTeam = (teamMember: ITeamMember) => {
+    dispatchAddNewTeam(teamMember);
+    dispatchFilterTasks(selectedAssignee);
+    dispatchShowAddNewTeamMember();
+  }
+
+  const addNewTask = React.useCallback(
+      (task: ITask) => dispatch(addTask(task)),
+      [dispatch]
+  );
+
   const handleShowAddNewTeamMember = React.useCallback(
       () => dispatch(showAddNewTeamMember(displayAddNewTeamMember)),
       [dispatch]
   );
 
+  const handleShowAddNewTask = React.useCallback(
+      () => dispatch(showAddNewTask(displayAddNewTask)),
+      [dispatch]
+  );
+
+  const blankSpaceClicked = (): void => handleShowAddNewTask();
+
   const handleAddClick = (
   ): void => handleShowAddNewTeamMember()
 
+  const onPageClick = (event: any) => {
+    console.log('event', event);
+    if (event.target.innerText && event.target.innerText.includes("My Task Manager")) {
+        blankSpaceClicked();
+    }
+  }
+
 
   return (
-      <main className="App">
+      <main className="App" onClick={onPageClick}>
         <article className="cf">
           <div className="fl w-60 tc">
             <h1>My Task Manager</h1>
@@ -83,10 +130,14 @@ const App: React.FC = () =>  {
           <div className="fl w-80 tc">
             <TaskList taskList={taskList}/>
           </div>
-          {displayAddNewTeamMember ?
-          <div className="fl w-20 tc AddTeamMember">
-            <AddTeamMember addTeamMember={addNewTeamMember}/>
-          </div> : ''}
+          <div className="fl w-20 tc">
+            {displayAddNewTeamMember ?
+                <AddTeamMember addTeamMember={handleAddTeam}/>: ''}
+                <br/>
+            {displayAddNewTask ?
+                <AddTask addTask={addNewTask} assigneeOptions={getAssigneeOption(assigneeList)} priorityOptions={getPriorityOptionsList()}/>
+                : ''}
+          </div>
 
         </div>
       </main>

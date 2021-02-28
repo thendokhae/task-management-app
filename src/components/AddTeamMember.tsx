@@ -3,6 +3,7 @@ import {IAddTeamMemberProps} from "../models/IAddTeamMemberProps";
 import {IAddTeamMemberState} from "../models/IAddTeamMemberState";
 import {ITeamMember} from "../models/ITeamMember";
 import { Guid } from "guid-typescript";
+import * as Utils from "../utils/Utilities";
 
 class AddTeamMember extends Component<IAddTeamMemberProps, IAddTeamMemberState> {
     constructor(props: IAddTeamMemberProps) {
@@ -21,20 +22,16 @@ class AddTeamMember extends Component<IAddTeamMemberProps, IAddTeamMemberState> 
         e.preventDefault();
         const teamMember: ITeamMember = {
             name: this.state.name,
-            color: this.generateRandomColor(),
+            color: Utils.generateRandomColor(),
             id: Guid.create().toString()
         }
         this.props.addTeamMember(teamMember)
     };
 
-    generateRandomColor = () => {
-        return `#${Math.floor(Math.random()*16777215).toString(16)}` ;
-    }
-
     render() {
 
         return (
-            <div>
+            <div className="AddTeamMember">
                 <h3>Add New Team Member</h3>
                 <form onSubmit={this.addNewTeamMember} className="pa4 black-80">
                     <div className="measure">

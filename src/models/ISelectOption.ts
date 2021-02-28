@@ -1,6 +1,6 @@
 import {ITeamMember} from "./ITeamMember";
 
 export interface ISelectOption {
-    value: ITeamMember,
+    value: ITeamMember | any,
     label: string
 }

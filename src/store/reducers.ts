@@ -72,14 +72,14 @@ export function taskManagerReducer(
     switch (action.type) {
         case ADD_TASK:
             const currentTask = state.taskList;
-            currentTask.push(action.payload)
+            currentTask.push(action.task)
             return {...state, taskList: currentTask}
         case UPDATE_TASK:
             return {
                 ...state, taskList: state.taskList, assigneeList: state.assigneeList
             }
         case ADD_TEAM_MEMBER:
-            const currentList = initialState.assigneeList;
+            const currentList = state.assigneeList;
             currentList.push(action.assignee);
             return { ...state, assigneeList: currentList}
         case FILTER_TASKS:
@@ -89,10 +89,11 @@ export function taskManagerReducer(
             }
             return {...state, taskList: filteredList}
         case SHOW_ADD_NEW_TEAM_MEMBER:
-            const show   = !state.showAddNewTeamMember;
+            const show  = !state.showAddNewTeamMember;
             return {...state, showAddNewTeamMember: show}
         case SHOW_ADD_NEW_TASK:
-            return {...state, showAddNewTask: action.addNewtask}
+            const taskShow = !state.showAddNewTask;
+            return {...state, showAddNewTask: taskShow}
         default:
             return state
     }
