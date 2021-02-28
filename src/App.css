@@ -9,3 +9,11 @@
 .link:hover {
   cursor: pointer;
 }
+
+.Container {
+  padding: 20px;
+}
+
+.AddTeamMember {
+  border: solid 1px;
+}

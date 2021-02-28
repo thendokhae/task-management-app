@@ -1,4 +1,11 @@
-import {ADD_ASSIGNEE, ADD_TASK, FILTER_TASKS, UPDATE_TASK} from "./actionTypes";
+import {
+    ADD_TEAM_MEMBER,
+    ADD_TASK,
+    FILTER_TASKS,
+    UPDATE_TASK,
+    SHOW_ADD_NEW_TEAM_MEMBER,
+    SHOW_ADD_NEW_TASK
+} from "./actionTypes";
 import {TaskActionTypes, TaskManagerState} from "../type";
 import {ITeamMember} from "../models/ITeamMember";
 import {Priority} from "../models/Priority";
@@ -53,7 +60,9 @@ const initialState: TaskManagerState = {
     selectedAssignee: {
         label: assigneeList[0].name,
         value: assigneeList[0]
-    }
+    },
+    showAddNewTask: false,
+    showAddNewTeamMember: false
 }
 
 export function taskManagerReducer(
@@ -69,9 +78,9 @@ export function taskManagerReducer(
             return {
                 ...state, taskList: state.taskList, assigneeList: state.assigneeList
             }
-        case ADD_ASSIGNEE:
-            const currentList = state.assigneeList;
-            currentList.push(action.payload);
+        case ADD_TEAM_MEMBER:
+            const currentList = initialState.assigneeList;
+            currentList.push(action.assignee);
             return { ...state, assigneeList: currentList}
         case FILTER_TASKS:
             let filteredList = initialState.taskList;
@@ -79,6 +88,11 @@ export function taskManagerReducer(
                 filteredList = initialState.taskList.filter(t => t.assignee.id === action.assignee.id)
             }
             return {...state, taskList: filteredList}
+        case SHOW_ADD_NEW_TEAM_MEMBER:
+            const show   = !state.showAddNewTeamMember;
+            return {...state, showAddNewTeamMember: show}
+        case SHOW_ADD_NEW_TASK:
+            return {...state, showAddNewTask: action.addNewtask}
         default:
             return state
     }

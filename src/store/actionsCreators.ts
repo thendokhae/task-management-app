@@ -3,9 +3,9 @@ import {ITeamMember} from "../models/ITeamMember";
 import {ITask} from "../models/ITask";
 import {DispatchType, TaskActionTypes} from "../type";
 
-export function addAssignee(assignee: ITeamMember): TaskActionTypes {
+export function addTeamMember(assignee: ITeamMember): TaskActionTypes {
     const action: TaskActionTypes = {
-        type: actionTypes.ADD_ASSIGNEE,
+        type: actionTypes.ADD_TEAM_MEMBER,
         assignee
     }
     return request(action)
@@ -34,6 +34,23 @@ export function filterTasks(assignee: ITeamMember): TaskActionTypes {
     }
     return request(action)
 }
+
+export function showAddNewTasks(addNewTask: boolean): TaskActionTypes {
+    const action: TaskActionTypes = {
+        type: actionTypes.SHOW_ADD_NEW_TASK,
+        addNewTask
+    }
+    return request(action)
+}
+
+export function showAddNewTeamMember(addNewTeamMember: boolean): TaskActionTypes {
+    const action: TaskActionTypes = {
+        type: actionTypes.SHOW_ADD_NEW_TEAM_MEMBER,
+        addNewTeamMember
+    }
+    return request(action)
+}
+
 
 export function request(action: TaskActionTypes) {
     return (dispatch: DispatchType) => {

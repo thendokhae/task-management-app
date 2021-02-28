@@ -6,7 +6,9 @@ import {ISelectOption} from "./models/ISelectOption";
 type TaskManagerState = {
     taskList: ITask[],
     assigneeList: ITeamMember[],
-    selectedAssignee: ISelectOption
+    selectedAssignee: ISelectOption,
+    showAddNewTeamMember: boolean,
+    showAddNewTask: boolean
 }
 
 type TaskActionTypes = AddTask | UpdateTask | AddAssignee | FilterTasks;

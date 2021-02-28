@@ -8,7 +8,8 @@ import {ITask} from "./models/ITask";
 import TaskList from "./components/TaskList";
 import TeamMemberList from "./components/TeamMemberList";
 import {ISelectOption} from "./models/ISelectOption";
-import {filterTasks} from "./store/actionsCreators";
+import {addTeamMember, filterTasks, showAddNewTeamMember} from "./store/actionsCreators";
+import AddTeamMember from "./components/AddTeamMember";
 
 
 function getAssigneeOption(assigneeList: ITeamMember[]): ISelectOption[]{
@@ -20,18 +21,23 @@ function getAssigneeOption(assigneeList: ITeamMember[]): ISelectOption[]{
 }
 
 const App: React.FC = () =>  {
-  const taskList: ITask[] = useSelector(
-      (state: TaskManagerState) => state.taskList,
-      shallowEqual
-  );
-
   const assigneeList: ITeamMember[] = useSelector(
       (state: TaskManagerState) => state.assigneeList,
       shallowEqual
   );
 
+  const taskList: ITask[] = useSelector(
+      (state: TaskManagerState) => state.taskList,
+      shallowEqual
+  );
+
   const selectedAssignee: ISelectOption = useSelector(
       (state: TaskManagerState) => state.selectedAssignee,
+      shallowEqual
+  );
+
+  const displayAddNewTeamMember: boolean = useSelector(
+      (state: TaskManagerState) => state.showAddNewTeamMember,
       shallowEqual
   );
 
@@ -41,6 +47,20 @@ const App: React.FC = () =>  {
       (selectedOption: any) => dispatch(filterTasks(selectedOption.value)),
       [dispatch]
   );
+
+  const addNewTeamMember = React.useCallback(
+      (teamMember: ITeamMember) => dispatch(addTeamMember(teamMember)),
+      [dispatch]
+  );
+
+  const handleShowAddNewTeamMember = React.useCallback(
+      () => dispatch(showAddNewTeamMember(displayAddNewTeamMember)),
+      [dispatch]
+  );
+
+  const handleAddClick = (
+  ): void => handleShowAddNewTeamMember()
+
 
   return (
       <main className="App">
@@ -54,12 +74,21 @@ const App: React.FC = () =>  {
                 <TeamMemberList selectOptions={getAssigneeOption(assigneeList)} selectedOption={selectedAssignee} filterTeamMember={filterTeamMember}/>
               </div>
               <div className="fl w-40 tc">
-                <a className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black">Add</a>
+                <button className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black" onClick={handleAddClick}>Add</button>
               </div>
             </div>
           </div>
         </article>
-        <TaskList taskList={taskList}/>
+        <div className="cf Container">
+          <div className="fl w-80 tc">
+            <TaskList taskList={taskList}/>
+          </div>
+          {displayAddNewTeamMember ?
+          <div className="fl w-20 tc AddTeamMember">
+            <AddTeamMember addTeamMember={addNewTeamMember}/>
+          </div> : ''}
+
+        </div>
       </main>
   );
 }
