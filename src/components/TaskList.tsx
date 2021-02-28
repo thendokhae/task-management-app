@@ -23,6 +23,10 @@ class TaskList extends Component<ITaskListProps, ITaskListState> {
         this.props.selectTask(task);
     }
 
+    handleCompleteTask = (task: ITask) => {
+        this.props.completeTask(task);
+    }
+
     public render() {
         const taskComponent = this.props.taskList.map((task) => {
             return (
@@ -32,6 +36,7 @@ class TaskList extends Component<ITaskListProps, ITaskListState> {
                     complete={task.complete}
                     name={task.name}
                     priority={task.priority}
+                    completeTask={this.handleCompleteTask}
                     selectTask={this.handleSelectTask}
                     id={task.id}
                 />

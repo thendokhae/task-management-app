@@ -90,10 +90,10 @@ export function taskManagerReducer(
             } else {
                 currentTask.push(action.task)
             }
-            return {...state, taskList: currentTask}
+            return {...state, taskList: currentTask, selectedTask: initialState.selectedTask}
         case UPDATE_TASK:
             return {
-                ...state, taskList: state.taskList, assigneeList: state.assigneeList
+                ...state, taskList: state.taskList, assigneeList: state.assigneeList, selectedTask: initialState.selectedTask
             }
         case ADD_TEAM_MEMBER:
             const currentList = state.assigneeList;

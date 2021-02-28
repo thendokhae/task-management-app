@@ -9,4 +9,5 @@ export interface ITaskProps {
     complete: boolean,
     id: string,
     selectTask: (task: ITask) => void;
+    completeTask: (task: ITask) => void;
 }

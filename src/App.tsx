@@ -13,7 +13,7 @@ import {
   filterTasks,
   selectTask,
   showAddNewTask,
-  showAddNewTeamMember
+  showAddNewTeamMember, updateTask
 } from "./store/actionsCreators";
 import AddTeamMember from "./components/AddTeamMember";
 import AddTask from "./components/AddTask";
@@ -24,6 +24,16 @@ function getAssigneeOption(assigneeList: ITeamMember[]): ISelectOption[]{
   const result: ISelectOption[] = [];
   assigneeList.forEach(a => {
     result.push({ label: a.name, value: a});
+  })
+  return result;
+}
+
+function getAssigneeListOptions(assigneeList: ITeamMember[]): ISelectOption[]{
+  const result: ISelectOption[] =[];
+  assigneeList.forEach(a => {
+    if (a.id !== "-1") {
+      result.push({label: a.name, value: a});
+    }
   })
   return result;
 }
@@ -82,13 +92,13 @@ const App: React.FC = () =>  {
 
   const dispatchAddNewTeam = (team: ITeamMember): void => addNewTeamMember(team);
 
-  const dispatchFilterTasks = (selectedAssignee: ISelectOption): void => filterTeamMember(selectedAssignee);
-
   const dispatchShowAddNewTeamMember = (show: boolean): void => handleShowAddNewTeamMember(show);
 
   const dispatchShowAddNewTask = (show: boolean): void => handleShowAddNewTask(show);
 
   const dispatchSelectTask = (task: ITask): void => handleSelectTask(task);
+
+  const dispatchUpdateTask = (task: ITask): void => handleUpdateTask(task);
 
   const handleAddTeam = (teamMember: ITeamMember) => {
     dispatchAddNewTeam(teamMember);
@@ -122,9 +132,19 @@ const App: React.FC = () =>  {
       [dispatch]
   );
 
+  const handleUpdateTask = React.useCallback(
+      (task) => dispatch(updateTask(task)),
+      [dispatch]
+  );
+
   const onTaskSelect = (task: ITask) => {
     dispatchSelectTask(task);
     blankSpaceClicked(true);
+  }
+
+  const onCompleteTask =(task: ITask) => {
+    dispatchUpdateTask(task)
+    blankSpaceClicked(false);
   }
 
   const blankSpaceClicked = (show: boolean): void => handleShowAddNewTask(show);
@@ -139,7 +159,7 @@ const App: React.FC = () =>  {
 
   const onPageClick = (event: any) => {
     console.log('event', event);
-    if (event.target.innerText && event.target.innerText.includes("My Task Manager")) {
+    if (event.target.innerText && event.target.innerText.includes("Sticky Scheduler")) {
         const showAdd = !displayAddNewTask;
         blankSpaceClicked(showAdd);
     }
@@ -150,7 +170,7 @@ const App: React.FC = () =>  {
       <main className="App" onClick={onPageClick}>
         <article className="cf">
           <div className="fl w-60 tc">
-            <h1>My Task Manager</h1>
+            <h1>Sticky Scheduler</h1>
           </div>
           <div className="fl w-40 tc ButtonAlign">
             <div className="cf">
@@ -165,14 +185,14 @@ const App: React.FC = () =>  {
         </article>
         <div className="cf Container">
           <div className="fl w-80 tc">
-            <TaskList taskList={taskList} selectTask={onTaskSelect}/>
+            <TaskList taskList={taskList} selectTask={onTaskSelect} completeTask={onCompleteTask}/>
           </div>
           <div className="fl w-20 tc">
             {displayAddNewTeamMember ?
                 <AddTeamMember addTeamMember={handleAddTeam}/>: ''}
                 <br/>
             {displayAddNewTask ?
-                <AddTask addTask={handleAddNewTask} assigneeOptions={getAssigneeOption(assigneeList)}
+                <AddTask addTask={handleAddNewTask} assigneeOptions={getAssigneeListOptions(assigneeList)}
                          priorityOptions={getPriorityOptionsList()} task={selectedTask}/>
                 : ''}
           </div>
