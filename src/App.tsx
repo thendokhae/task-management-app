@@ -10,10 +10,12 @@ import {ISelectOption} from "./models/ISelectOption";
 import {
   addTask,
   addTeamMember,
-  filterTasks, searchTask,
+  filterTasks,
+  searchTask,
   selectTask,
   showAddNewTask,
-  showAddNewTeamMember, updateTask
+  showAddNewTeamMember,
+  updateTask
 } from "./store/actionsCreators";
 import AddTeamMember from "./components/AddTeamMember";
 import AddTask from "./components/AddTask";
@@ -156,20 +158,30 @@ const App: React.FC = () =>  {
   const blankSpaceClicked = (show: boolean): void => handleShowAddNewTask(show);
 
   const onAddTeamMemberClick =()=> {
-    const show = !displayAddNewTeamMember;
-    handleAddClick(show);
-
+    handleAddClick(true);
   }
 
   const handleAddClick = (show: boolean): void => handleShowAddNewTeamMember(show)
 
   const onPageClick = (event: any) => {
-    console.log('event', event);
-    if (event.target.innerText && event.target.innerText.includes("Sticky Scheduler")) {
-        const showAdd = !displayAddNewTask;
-        blankSpaceClicked(showAdd);
+    if (event.target.firstChild && event.target.firstChild.classList
+        && event.target.firstChild.classList.length > 0
+        && !event.target.firstChild.classList.contains("css-1uccc91-singleValue")
+        && !event.target.firstChild.classList.contains("css-tj5bde-Svg")) {
+      dispatchSelectTask({
+        assignee: {name: '', id: '', color: ''},
+        priority: Priority.LOW,
+        name: '',
+        complete: false,
+        id: ''
+      });
+      blankSpaceClicked(true);
     }
   }
+
+  const onCancelAddTask = (show: boolean) => handleShowAddNewTask(show);
+
+  const onCancelAddTeamMember = (show: boolean): void => handleShowAddNewTeamMember(show);
 
 
   return (
@@ -198,11 +210,11 @@ const App: React.FC = () =>  {
           </div>
           <div className="fl w-20 tc">
             {displayAddNewTeamMember ?
-                <AddTeamMember addTeamMember={handleAddTeam}/>: ''}
+                <AddTeamMember addTeamMember={handleAddTeam} cancelAddTeamMember={onCancelAddTeamMember}/>: ''}
                 <br/>
             {displayAddNewTask ?
                 <AddTask addTask={handleAddNewTask} assigneeOptions={getAssigneeListOptions(assigneeList)}
-                         priorityOptions={getPriorityOptionsList()} task={selectedTask}/>
+                         priorityOptions={getPriorityOptionsList()} task={selectedTask} cancelAddTask={onCancelAddTask}/>
                 : ''}
           </div>
 

@@ -6,4 +6,5 @@ export interface IAddTaskProps {
     assigneeOptions: ISelectOption[];
     priorityOptions: ISelectOption[];
     task: ITask;
+    cancelAddTask: (cancel: boolean) => void;
 }

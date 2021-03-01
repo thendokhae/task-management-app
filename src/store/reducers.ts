@@ -62,8 +62,12 @@ const getAppDateFromStorage  = (): TaskManagerState => {
         ],
         assigneeList: assigneeList,
         selectedAssignee: {
-            label: assigneeList[0].name,
-            value: assigneeList[0]
+            label: 'All Team members',
+            value:     {
+                color: '',
+                name: 'All Team members',
+                id: '-1'
+            }
         },
         showAddNewTask: false,
         showAddNewTeamMember: false,
@@ -78,13 +82,6 @@ const getAppDateFromStorage  = (): TaskManagerState => {
             name: '',
             complete: false
         }
-    }
-
-    if (data) {
-        const savedState = JSON.parse(data);
-        taskManagerState.taskList = JSON.parse(savedState.taskList);
-        taskManagerState.assigneeList = JSON.parse(savedState.assigneeList);
-        console.log(taskManagerState)
     }
 
     return taskManagerState;
@@ -127,7 +124,7 @@ export function taskManagerReducer(
         case SELECT_TASK:
             return {...state, selectedTask: action.task}
         case SEARCH_TASK:
-            if (action.text.length > 1) {
+            if (action.text.length > 0) {
                 const filteredTasks = initialState.taskList.filter(
                     t => t.name.toLowerCase().includes(action.text.toLowerCase())
                         || t.priority.toLowerCase().includes(action.text.toLowerCase()) || t.assignee.name.toLowerCase()

@@ -24,6 +24,13 @@ class Task extends Component<ITaskProps, ITaskState> {
         this.setState({complete});
     }
 
+    componentDidUpdate(prevProps: Readonly<ITaskProps>, prevState: Readonly<ITaskState>, snapshot?: any): void {
+        if (prevProps.id !== this.props.id) {
+            const {assignee, complete, name, priority} = this.props
+            this.setState({assignee, complete, name, priority});
+        }
+    }
+
     selectTask = () => {
         if (!this.state.complete) {
             const task: ITask = {

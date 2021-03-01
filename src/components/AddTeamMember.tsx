@@ -50,12 +50,16 @@ class AddTeamMember extends Component<IAddTeamMemberProps, IAddTeamMemberState> 
         this.setState({ color });
     };
 
+    handleCancel = (e: any) => {
+        this.props.cancelAddTeamMember(false);
+    }
+
     render() {
 
         return (
             <div className="AddTeamMember">
                 <h3>Add New Team Member</h3>
-                <form onSubmit={this.addNewTeamMember} className="pa4 black-80">
+                <form className="pa4 black-80">
                     <div className="measure">
                         <label htmlFor="name" className="f6 b db mb2">Name</label>
                         <input id="name" className="input-reset ba b--black-20 pa2 mb2 db w-100" type="text"
@@ -69,10 +73,19 @@ class AddTeamMember extends Component<IAddTeamMemberProps, IAddTeamMemberState> 
                             options={this.colorList}
                         />
                     </div>
-                    <div className="mt3">
-                        <button disabled={this.state.name === ''} className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black">
-                            Save
-                        </button>
+                    <div className="mt6">
+                        <div className="cf">
+                            <div className="fl w-50 tc">
+                                <button disabled={this.state.name === '' || this.state.color.label === ''} className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black" onClick={this.addNewTeamMember}>
+                                    Save
+                                </button>
+                            </div>
+                            <div className="fl w-50 tc">
+                                <button className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black" onClick={this.handleCancel}>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

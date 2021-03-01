@@ -60,6 +60,10 @@ class AddTask extends Component<IAddTaskProps, IAddTaskState>{
         this.setState({ selectedPriority });
     };
 
+    handleCancelTask = (e: any) => {
+        this.props.cancelAddTask(false);
+    }
+
     addNewTask = (e: React.FormEvent) => {
         e.preventDefault();
         const task: ITask = {
@@ -77,7 +81,7 @@ class AddTask extends Component<IAddTaskProps, IAddTaskState>{
         return (
             <div className="AddTeamMember">
                 <h3>Add New Task</h3>
-                <form onSubmit={this.addNewTask} className="pa4 black-80">
+                <div className="pa4 black-80">
                     <div className="measure">
                         <label htmlFor="assignee" className="f6 b db mb2">Assignee</label>
                         <Select
@@ -99,13 +103,22 @@ class AddTask extends Component<IAddTaskProps, IAddTaskState>{
                         <input id="description" className="input-reset ba b--black-20 pa2 mb2 db w-100" type="text" value={this.state.name}
                                onChange={this.handleNameChangeData}/>
                     </div>
-                    <div className="mt3">
-                        <button disabled={this.state.name === '' || this.state.selectedAssignee.label === ''
-                        || this.state.selectedPriority.label === ''} className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black">
-                            Save
-                        </button>
+                    <div className="mt6">
+                        <div className="cf">
+                            <div className="fl w-50 tc">
+                                <button disabled={this.state.name === '' || this.state.selectedAssignee.label === ''
+                                || this.state.selectedPriority.label === ''} className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black" onClick={this.addNewTask}>
+                                    Save
+                                </button>
+                            </div>
+                            <div className="fl w-50 tc">
+                                <button className="ff6 link dim ba bw1 ph3 pv2 mb2 dib black" onClick={this.handleCancelTask}>
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         );
     }

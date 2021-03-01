@@ -13,7 +13,7 @@ class SearchTask extends Component<ISearchProps, ISearchState> {
     handleSearch =(e: React.ChangeEvent<HTMLInputElement>) => {
         const text = e.target.value;
         this.setState({text});
-        this.props.searchTask(this.state.text);
+        this.props.searchTask(text);
     }
 
 
